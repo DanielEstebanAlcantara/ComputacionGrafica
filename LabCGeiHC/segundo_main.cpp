@@ -4,7 +4,9 @@
 #include <glfw3.h>
 //Dimensiones de la ventana
 const int WIDTH = 800, HEIGHT = 800;
-GLuint VAO, VBO, shader;
+GLuint VAO, VBO, shader; //para el triangulo
+GLuint VAO_cuadrado, VBO_cuadrado; //para el cuadrado
+GLuint VAO_rombo, VBO_rombo;  //para el rombo
 
 //LENGUAJE DE SHADER (SOMBRAS) GLSL
 //Vertex Shader
@@ -24,7 +26,7 @@ static const char* fShader = "						\n\
 out vec4 color;										\n\
 void main()											\n\
 {													\n\
-	color = vec4(1.0f,0.0f,0.0f,1.0f);	 			\n\
+	color = vec4(0.153f,0.451f,0.369f,1.0f);	 			\n\
 }";
 
 
@@ -32,15 +34,75 @@ void main()											\n\
 void CrearTriangulo()
 {
 	GLfloat vertices[] = {
-		-1.0f, -1.0f,0.0f,
-		1.0f,-1.0f, 0.0f,
-		0.0f,1.0f,0.0f
+		0.7f, 0.3f,0.0f,
+		0.9f,0.5f, 0.0f,
+		0.7f,0.7f,0.0f,
+
+		//creando un segundo cuadrado
+		/*
+		0.5f, 0.5f,0.0f,
+		0.7f,0.3f,0.0f,
+		0.7f,0.7f,0.0f
+		*/
 	};
 	glGenVertexArrays(1, &VAO); //generar 1 VAO
 	glBindVertexArray(VAO);//asignar VAO
 
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); //pasarle los datos al VBO asignando tamano, los datos y en este caso es estático pues no se modificarán los valores
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), (GLvoid*)0);//Stride en caso de haber datos de color por ejemplo, es saltar cierta cantidad de datos
+	glEnableVertexAttribArray(0);
+	//agregar valores a vèrtices y luego declarar un nuevo vertexAttribPointer
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
+}
+void CrearCuadrado()
+{
+	GLfloat vertices[] = {
+		-0.4f, 0.0f,0.0f,
+		-0.2f,0.0f, 0.0f,
+		-0.2f,0.2f,0.0f,
+
+		//creando un segundo cuadrado
+		-0.4f, 0.0f,0.0f,
+		-0.2f, 0.2f,0.0f,
+		-0.4f,0.2f,0.0f
+
+	};
+	glGenVertexArrays(1, &VAO_cuadrado); //generar 1 VAO
+	glBindVertexArray(VAO_cuadrado);//asignar VAO
+
+	glGenBuffers(1, &VBO_cuadrado);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_cuadrado);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); //pasarle los datos al VBO asignando tamano, los datos y en este caso es estático pues no se modificarán los valores
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), (GLvoid*)0);//Stride en caso de haber datos de color por ejemplo, es saltar cierta cantidad de datos
+	glEnableVertexAttribArray(0);
+	//agregar valores a vèrtices y luego declarar un nuevo vertexAttribPointer
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
+}
+void CrearRombo()
+{
+	GLfloat vertices[] = {
+		0.7f, 0.3f,0.0f,
+		0.9f,0.5f, 0.0f,
+		0.7f,0.7f,0.0f,
+
+		//creando un segundo cuadrado
+		0.5f, 0.5f,0.0f,
+		0.7f,0.3f,0.0f,
+		0.7f,0.7f,0.0f
+	};
+	glGenVertexArrays(1, &VAO_rombo); //generar 1 VAO
+	glBindVertexArray(VAO_rombo);//asignar VAO
+
+	glGenBuffers(1, &VBO_rombo);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_rombo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); //pasarle los datos al VBO asignando tamano, los datos y en este caso es estático pues no se modificarán los valores
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), (GLvoid*)0);//Stride en caso de haber datos de color por ejemplo, es saltar cierta cantidad de datos
@@ -160,7 +222,10 @@ int main()
 
 	//Llamada a las funciones creadas antes del main
 	CrearTriangulo();
+	CrearCuadrado();
+	CrearRombo();
 	CompileShaders();
+
 
 
 	//Loop mientras no se cierra la ventana
@@ -175,8 +240,20 @@ int main()
 
 		glUseProgram(shader);
 
+		/*
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES,0,6);// candtidad de vertices, para dos triangulos serían 6, y se podría formar un cuadrado
+		glBindVertexArray(0);
+		*/
+
+		//Cuadra
+		glBindVertexArray(VAO_cuadrado);
+		glDrawArrays(GL_TRIANGLES, 0, 6); // cuadrado = 2 triángulos = 6 vértices
+		glBindVertexArray(0);
+
+		// Rombo
+		glBindVertexArray(VAO_rombo);
+		glDrawArrays(GL_TRIANGLES, 0, 6); // rombo = 2 triángulos también
 		glBindVertexArray(0);
 
 		glUseProgram(0);
