@@ -38,7 +38,7 @@ void CrearTriangulo()
 		0.9f,0.5f, 0.0f,
 		0.7f,0.7f,0.0f,
 
-		//creando un segundo cuadrado
+		//creando un segundo triangulo
 		/*
 		0.5f, 0.5f,0.0f,
 		0.7f,0.3f,0.0f,
@@ -47,7 +47,6 @@ void CrearTriangulo()
 	};
 	glGenVertexArrays(1, &VAO); //generar 1 VAO
 	glBindVertexArray(VAO);//asignar VAO
-
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); //pasarle los datos al VBO asignando tamano, los datos y en este caso es estático pues no se modificarán los valores
@@ -62,14 +61,14 @@ void CrearTriangulo()
 void CrearCuadrado()
 {
 	GLfloat vertices[] = {
-		-0.4f, 0.0f,0.0f,
-		-0.2f,0.0f, 0.0f,
-		-0.2f,0.2f,0.0f,
+		-0.8f, -0.2f, 0.0f,
+		-0.2f, 0.4f, 0.0f,
+		-0.8f, 0.4f, 0.0f,
 
-		//creando un segundo cuadrado
-		-0.4f, 0.0f,0.0f,
-		-0.2f, 0.2f,0.0f,
-		-0.4f,0.2f,0.0f
+		//creando un segundo triangulo
+		-0.8f, -0.2f,0.0f,
+		-0.2f, -0.2f,0.0f,
+		-0.2f, 0.4f,0.0f
 
 	};
 	glGenVertexArrays(1, &VAO_cuadrado); //generar 1 VAO
@@ -89,14 +88,14 @@ void CrearCuadrado()
 void CrearRombo()
 {
 	GLfloat vertices[] = {
-		0.7f, 0.3f,0.0f,
-		0.9f,0.5f, 0.0f,
-		0.7f,0.7f,0.0f,
+		0.4f, -0.4f,0.0f,
+		0.4f, 0.4f, 0.0f,
+		0.0f,0.0f,0.0f,
 
-		//creando un segundo cuadrado
-		0.5f, 0.5f,0.0f,
-		0.7f,0.3f,0.0f,
-		0.7f,0.7f,0.0f
+		//creando un segundo triangulo
+		0.4f, -0.4f,0.0f,
+		0.8f, 0.0f,0.0f,
+		0.4f, 0.4f,0.0f
 	};
 	glGenVertexArrays(1, &VAO_rombo); //generar 1 VAO
 	glBindVertexArray(VAO_rombo);//asignar VAO
@@ -226,16 +225,29 @@ int main()
 	CrearRombo();
 	CompileShaders();
 
-
+	
+	
 
 	//Loop mientras no se cierra la ventana
 	while (!glfwWindowShouldClose(mainWindow))
 	{
 		//Recibir eventos del usuario
 		glfwPollEvents();
+		//se usa función glfwGetTime() que devuele los segundos transcurridos desde glfwInit, devuelve un double, se castea a int
+		//el módulo 3 nos ayuda a solo ir entre 0, 1 y 2 
+		int segundo = (int)glfwGetTime() %3;
+
+		//operador ternario que no permite intercambiar el color segun el segundo 
+		float rojo = (segundo == 0) ? 1.0f : 0.0f;
+		float verde = (segundo == 1) ? 1.0f : 0.0f;
+		float  azul= (segundo == 2) ? 1.0f : 0.0f;
+		
+		
+
+		glClearColor(rojo, verde, azul, 1.0f);
 
 		//Limpiar la ventana
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		//glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glUseProgram(shader);
