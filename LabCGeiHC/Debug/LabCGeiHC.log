@@ -1,2 +1,4 @@
 ﻿  segundo_main.cpp
+C:\Users\danid\Documents\2026-1\CompuGrafica\lab\LabCGeiHC\LabCGeiHC\segundo_main.cpp(48,10): warning C4305: 'inicializando': truncamiento de 'double' a 'GLfloat'
+C:\Users\danid\Documents\2026-1\CompuGrafica\lab\LabCGeiHC\LabCGeiHC\segundo_main.cpp(192,9): warning C4305: 'inicializando': truncamiento de 'double' a 'GLfloat'
   LabCGeiHC.vcxproj -> C:\Users\danid\Documents\2026-1\CompuGrafica\lab\LabCGeiHC\Debug\LabCGeiHC.exe
